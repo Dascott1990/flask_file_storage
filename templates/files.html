@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Uploaded Files</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Your Uploaded Files</h1>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for category, message in messages %}
+                <li class="flash {{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+        {% if files %}
+        <ul>
+            {% for file in files %}
+            <li>
+                <a href="{{ url_for('uploaded_file', filename=file) }}">{{ file }}</a>
+                <form action="{{ url_for('delete_file', filename=file) }}" method="post" style="display: inline;">
+                    <button type="submit" class="delete-btn" title="Delete {{ file }}">🗑️</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No files uploaded yet.</p>
+        {% endif %}
+        <a href="/upload" class="upload-btn">Upload More Files</a>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+</body>
+</html>
